@@ -29,8 +29,21 @@ def shopSmart(orderList, fruitShops):
         orderList: List of (fruit, numPound) tuples
         fruitShops: List of FruitShops
     """
-    "*** YOUR CODE HERE ***"
-    return None
+    bestShop = fruitShops[0]
+    bestPrice = bestShop.getPriceOfOrder(orderList)
+
+    for shop in fruitShops:
+        missing = False
+        for fruit, numPounds in orderList:
+            if fruit not in shop.fruitPrices:
+                missing = True
+                break
+            if missing:
+                continue
+            if shop.getPriceOfOrder(orderList) < bestPrice:
+                bestShop = shop
+                bestPrice = shop.getPriceOfOrder(orderList)
+    return bestShop
 
 
 if __name__ == '__main__':
