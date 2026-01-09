@@ -29,8 +29,8 @@ def shopSmart(orderList, fruitShops):
         orderList: List of (fruit, numPound) tuples
         fruitShops: List of FruitShops
     """
-    bestShop = fruitShops[0]
-    bestPrice = bestShop.getPriceOfOrder(orderList)
+    bestShop = None
+    bestPrice = float('inf') #very large value
 
     for shop in fruitShops:
         missing = False
