@@ -137,17 +137,27 @@ class MinimaxAgent(MultiAgentSearchAgent):
         """
         "*** YOUR CODE HERE ***"
         
+        numAgents = gameState.getNumAgents()
+
+        def value(state, agentIndex, currentDepth): #terminal state or max depth reached
+            if state.isWin() or state.isLose() or currentDepth==self.depth:
+                return self.evaluationFunction(state)
+            if agentIndex==0: #it's pacman
+                return max_value(state, agentIndex, currentDepth)
+            else: #ghosts
+                return min_value(state, agentIndex, currentDepth)
+
+
         def max_value(state, agentIndex, currentDepth):
             v = -float('inf')
             #loop thru pacman's available actions
-            for action in state.getLegalActions(agentIndex):
-                successor = state.generateSuccessor(agentIndex, action)
+            for action in state.getLegalActions(0):
+                successor = state.generateSuccessor(0, action)
                 v = max(v, value(successor, 1, currentDepth))
             return v
 
         def min_value(state, agentIndex, currentDepth):
             v = float('inf')
-            numAgents = state.getNumAgents()
             #loop thru ghosts' available actions
             for action in state.getLegalActions(agentIndex):
                 successor = state.generateSuccessor(agentIndex, action)
@@ -159,14 +169,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
                     v = min(v, value(successor, agentIndex+1, currentDepth))
             return v
 
-        def value(state, agentIndex, currentDepth): #terminal state or max depth reached
-            if state.isWin() or state.isLose() or currentDepth==self.depth:
-                return self.evaluationFunction(state)
-            if agentIndex==0:
-                return max_value(state, agentIndex, currentDepth)
-            else:
-                return min_value(state, agentIndex, currentDepth)
-        
+
         bestAction = None
         maxValueAction = -float('inf')
 
