@@ -136,28 +136,6 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Returns whether or not the game state is a losing state
         """
         "*** YOUR CODE HERE ***"
-
-        bestAction = None
-        maxValueAction = -float('inf')
-
-        #loop thru actions for pacman maximizer to find highest return
-        for action in gameState.getLegalActions(0):
-            successor = gameState.generateSuccessor(0, action)
-            currentValue = value(successor, 1, 0)
-
-            if currentValue > maxValueAction:
-                maxValueAction = currentValue
-                bestAction = action
-        return bestAction
-        
-
-        def value(state, agentIndex, currentDepth): #terminal state or max depth reached
-            if state.isWin() or state.isLose() or currentDepth==self.depth:
-                return self.evaluationFunction(state)
-            if agentIndex==0:
-                return max_value(state, agentIndex, currentDepth)
-            else:
-                return min_value(state, agentIndex, currentDepth)
         
         def max_value(state, agentIndex, currentDepth):
             v = -float('inf')
@@ -180,6 +158,27 @@ class MinimaxAgent(MultiAgentSearchAgent):
                 else:#there are more ghosts
                     v = min(v, value(successor, agentIndex+1, currentDepth))
             return v
+
+        def value(state, agentIndex, currentDepth): #terminal state or max depth reached
+            if state.isWin() or state.isLose() or currentDepth==self.depth:
+                return self.evaluationFunction(state)
+            if agentIndex==0:
+                return max_value(state, agentIndex, currentDepth)
+            else:
+                return min_value(state, agentIndex, currentDepth)
+        
+        bestAction = None
+        maxValueAction = -float('inf')
+
+        #loop thru actions for pacman maximizer to find highest return
+        for action in gameState.getLegalActions(0):
+            successor = gameState.generateSuccessor(0, action)
+            currentValue = value(successor, 1, 0)
+
+            if currentValue > maxValueAction:
+                maxValueAction = currentValue
+                bestAction = action
+        return bestAction
 
         util.raiseNotDefined()
 
